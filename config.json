@@ -1,0 +1,17 @@
+{
+  "view_selection": {
+    "model_folder": "/app/data/models/view_selection",
+    "models": {
+      "resnet50": "resnet50.hdf5",
+      "vgg19": "vgg19.hdf5",
+      "xception": "xception.hdf5"
+    }
+  },
+  "es_selection": {
+    "model_folder": "/app/data/models/es_selection",
+    "models": {
+      "resnet50-lstm": "resnet50_lstm.hdf5",
+      "vgg19-lstm": "vgg19_lstm.hdf5"
+    }
+  }
+}
