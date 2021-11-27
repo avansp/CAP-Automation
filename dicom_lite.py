@@ -43,6 +43,8 @@ class DicomLite:
             for f in progress:
                 try:
                     dcm = pydicom.read_file(f, force=True)
+                    if "TransferSyntaxUID" not in dcm.file_meta:
+                        continue
                 except:
                     continue
 

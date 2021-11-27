@@ -39,6 +39,13 @@ def view(path: Path = typer.Argument(None, help="A path of a DICOM image or a fo
 
     # predict
     results = pred.predict(path)
+
+    # save output
+    if output is not None:
+        results.to_csv(output)
+        typer.secho(f"Results are saved in {output}", fg=typer.colors.MAGENTA, italic=True)
+
+    # print output
     typer.secho(f"Results:", fg=typer.colors.GREEN, bold=True)
     typer.secho(results, fg=typer.colors.GREEN)
 
