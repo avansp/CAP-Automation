@@ -16,8 +16,9 @@ class ViewNetwork(str, Enum):
 
 
 @app.command()
-def view(path: Path = typer.Argument(None, help="A path of a DICOM image or a folder"),
-         model_name: ViewNetwork = typer.Option("resnet50", "--model", help="Network model name", case_sensitive=False)):
+def view(path: Path = typer.Argument(None, help="A path of a DICOM image or a folder."),
+         model_name: ViewNetwork = typer.Option("resnet50", "--model", help="Network model name", case_sensitive=False),
+         output: Path = typer.Option(None, help="Save results as a CSV file")):
     """
     Automatically predict slice view of a DICOM image or all DICOM images in a folder.
     """
@@ -26,6 +27,7 @@ def view(path: Path = typer.Argument(None, help="A path of a DICOM image or a fo
                    f"in the configuration file.")
         typer.Abort()
 
+    # load the network model
     typer.echo(f"Slice view prediction using {model_name.value}")
     model_filename = Path(app_config["view_selection"]["model_folder"]) / app_config["view_selection"]["models"][model_name.value]
 
@@ -35,16 +37,10 @@ def view(path: Path = typer.Argument(None, help="A path of a DICOM image or a fo
 
     pred = ViewPrediction(model_filename)
 
-    if path.is_file():
-        typer.echo(f"Predicting a single image file: {path}")
-        view_name = pred.predict_file(path)
-        typer.echo("Predicted view is: " + typer.style(f"{view_name}", fg=typer.colors.GREEN, bold=True))
-    elif path.is_dir():
-        typer.echo(f"Predicting a folder: {path}")
-        # pred.batch_predict(path)
-    else:
-        typer.echo(f"Input path {path} is neither a file or a folder.")
-        typer.Abort()
+    # predict
+    results = pred.predict(path)
+    typer.secho(f"Results:", fg=typer.colors.GREEN, bold=True)
+    typer.secho(results, fg=typer.colors.GREEN)
 
 
 @app.command()

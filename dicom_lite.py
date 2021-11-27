@@ -1,6 +1,5 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
-import tensorflow as tf
 from pathlib import Path
 import typer
 import pydicom
@@ -64,23 +63,11 @@ class DicomLite:
 
         typer.echo(f"Found {self.headers.shape[0]} eligible DICOM files.")
 
-    @staticmethod
-    def preprocess(img):
+    def get_series(self):
         """
-        Preprocessing an image into fixed image size before feeding it to a NN model.
-
-        Copied from CAP View Prediction.ipynb
+        Get a unique set of series UID's from the table
         """
-        # format image into tensor, standardized to 0-255
-        img = tf.cast(img, tf.float32)
-        img = tf.image.resize(tf.expand_dims(img, 2), (224, 224))
-        img = tf.image.grayscale_to_rgb(img)
-
-        # standardize
-        img /= tf.reduce_max(img)
-        img *= 255.
-
-        return img
+        return list(set(self.headers.SeriesInstanceUID.values))
 
     @staticmethod
     def clean_text(string):
