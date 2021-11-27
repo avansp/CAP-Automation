@@ -8,6 +8,6 @@ RUN apt-get update && apt-get install -y sudo libxml2 libsm6 libxext6 libxrender
 # Python3 has already installed
 # We need to install necessary packages
 RUN python -m pip install --upgrade pip \
-    && pip install numpy typer pydicom
+    && pip install numpy typer pydicom pandas
 
 #

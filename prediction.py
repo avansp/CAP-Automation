@@ -2,43 +2,8 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 import tensorflow as tf
 from pathlib import Path
-import pydicom
 import numpy as np
-import pandas as pd
-
-
-class DicomLite:
-    """
-    Extract necessary DICOM header
-    """
-    def __init__(self, dcm_filename: Path):
-        assert dcm_filename.is_file(), f"File {dcm_filename} does not exist."
-
-        ds = pydicom.read_file(dcm_filename, force=True)
-
-        # get patient, study, and series information
-        self.patientID = DicomLite.clean_text(ds.get("PatientID", "NA"))
-        self.studyDescription = DicomLite.clean_text(ds.get("StudyDescription", "NA"))
-        self.seriesDescription = DicomLite.clean_text(ds.get("SeriesDescription", "NA"))
-
-        # generate new, standardized file name
-        self.modality = ds.get("Modality", "NA")
-        self.studyInstanceUID = ds.get("StudyInstanceUID", "NA")
-        self.seriesInstanceUID = ds.get("SeriesInstanceUID", "NA")
-        self.seriesNumber = ds.get('SeriesNumber', 'NA')
-        self.instanceNumber = str(ds.get("InstanceNumber", "0"))
-
-        # load image data - preprocess it
-        self.image = ds.pixel_array
-
-    @staticmethod
-    def clean_text(string):
-        # clean and standardize text descriptions, which makes searching files easier
-        forbidden_symbols = ["*", ".", ",", "\"", "\\", "/", "|", "[", "]", ":", ";", " "]
-        for symbol in forbidden_symbols:
-            string = string.replace(symbol, "_")  # replace everything with an underscore
-
-        return string.lower()
+from dicom_lite import DicomLite
 
 
 class Prediction:
@@ -89,6 +54,8 @@ class ViewPrediction(Prediction):
         Predicting view of a DICOM image file.
         """
         ds = DicomLite(dcm_filename)
+
+        img = Prediction.preprocess(ds.iloc[0]['Image'])
         pred = tf.argmax(self.predict(ds.image), axis=-1)
 
         return self.CLASSES[int(pred)]

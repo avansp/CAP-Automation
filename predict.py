@@ -1,6 +1,7 @@
 import typer
 from pathlib import Path
 from prediction import ViewPrediction, Prediction
+from dicom_lite import DicomLite
 import json
 from enum import Enum
 
@@ -47,7 +48,7 @@ def view(path: Path = typer.Argument(None, help="A path of a DICOM image or a fo
 
 
 @app.command()
-def model(model_filename: Path):
+def inspect_model(model_filename: Path = typer.Argument(None, help="Neural network model file (in HDF5 format).")):
     """
     Inspect a model
     """
@@ -55,6 +56,16 @@ def model(model_filename: Path):
     pred = Prediction(model_filename)
 
     typer.echo(pred.model.summary())
+
+
+@app.command()
+def dicom_lite(path: Path = typer.Argument(None, help="A DICOM file or a folder that contains DICOM images.")):
+    """
+    Test DicomLite class.
+    """
+    dcm = DicomLite(path)
+    typer.echo("Sample header data:")
+    typer.echo(dcm.headers.head().transpose())
 
 
 @app.callback()
