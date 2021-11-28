@@ -51,7 +51,7 @@ From inside the container you can run a prediction as
 
 ```
 tf-docker /app > cd codes
-tf-docker /app > python predict.py view --output /app/results/prediction_results.csv \
+tf-docker /app/codes > python predict.py view --output /app/results/prediction_results.csv \
 /app/data/images/YOUR_CMR_STUDY
 ```
 
