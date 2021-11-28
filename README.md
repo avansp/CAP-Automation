@@ -57,6 +57,17 @@ tf-docker /app > python predict.py view --output /app/results/prediction_results
 
 For more options, call `python predict.py --help`
 
+## Requirements
+
+If you don't want to use docker, then here are required packages to run the codes:
+
+* Python >= 3.6
+* [Tensorflow](https://www.tensorflow.org/) v. 2.4.1
+* [Typer](https://typer.tiangolo.com)
+* [Pydicom](https://github.com/pydicom/pydicom)
+* [Pandas](https://pandas.pydata.org/)
+* [Numpy](https://numpy.org/)
+
 ## More information
 
 See the original repository by Brendan Crabb: [CAP-Automation](https://github.com/btcrabb/CAP-Automation)
