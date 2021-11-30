@@ -4,6 +4,7 @@ from pathlib import Path
 import typer
 import pydicom
 import pandas as pd
+import typer
 
 
 class DicomLite:
@@ -48,13 +49,21 @@ class DicomLite:
                 except:
                     continue
 
+                # need to check if there is an image data
+                # sometimes it's just empty
+                try:
+                    arr = dcm.pixel_array
+                except:
+                    continue
+
                 for k in self.headers:
+
                     if k in ['PatientID', 'StudyDescription', 'SeriesDescription']:
                         self.headers[k].append(DicomLite.clean_text(dcm.get(k, "NA")))
                     elif k in ['InstanceNumber']:
                         self.headers[k].append(str(dcm.get(k, "0")))
                     elif k == 'Image':
-                        self.headers[k].append(dcm.pixel_array)
+                        self.headers[k].append(arr)
                     elif k == 'Filename':
                         self.headers[k].append(f)
                     else:
