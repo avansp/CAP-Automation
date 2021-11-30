@@ -6,7 +6,7 @@ set -o pipefail
 IMAGE_NAME="capauto"
 OPT_RM="--rm"
 GPUS="--gpus all"
-OPT_TF="--shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864 --runtime=nvidia"
+OPT_TF="--shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864"
 OPT_DOCKER="--user $(id -u):$(id -g)"
 DATA=""
 APP_DIR="-v$(realpath .):/app/codes"
