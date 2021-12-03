@@ -9,7 +9,7 @@ GPUS="--gpus all"
 OPT_TF="--shm-size=1g --ulimit memlock=-1 --ulimit stack=67108864"
 OPT_DOCKER="--user $(id -u):$(id -g)"
 DATA=""
-APP_DIR="-v$(realpath .):/app/codes"
+APP_DIR="-v$(cd "$(dirname "$0")" && pwd -P):/app/codes"
 
 usage()
 {
@@ -39,7 +39,7 @@ do
     -k | --keep) OPT_RM="";   shift   ;;
     -n | --name) IMAGE_NAME="$2"; shift 2 ;;
     -h | --help) usage ;;
-    -d | --data) DATA="-v$(realpath $2):/app/data";  shift 2 ;;
+    -d | --data) DATA="-v$2:/app/data";  shift 2 ;;
     --) shift; break ;;
     *) echo "Unexpected option: $1."
        usage ;;
