@@ -48,11 +48,6 @@ done
 
 ACTION="docker run -it ${GPUS} ${OPT_TF} ${OPT_DOCKER} ${OPT_RM} --name capauto ${DATA} ${APP_DIR} ${IMAGE_NAME}"
 
-if test "$#" -ne 0; then
-  echo "Unexpected arguments found."
-  usage
-fi
-
 #set -x
 echo $ACTION
 eval $ACTION
